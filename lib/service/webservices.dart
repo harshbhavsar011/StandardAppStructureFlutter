@@ -4,6 +4,11 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:standardappstructure/service/apilistener.dart';
+import 'package:standardappstructure/utils/utils.dart';
+import 'dart:io';
+import 'package:connectivity/connectivity.dart';
+
+
 
 class WebServices {
   ApiListener mApiListener;
@@ -21,6 +26,8 @@ class WebServices {
     var client = new http.Client();
   }
 
+
+
   //This Function executed after any Success call of API
   void _onSuccessResponse(Object mObject) {
     mApiListener.onApiSuccess(mObject);
@@ -34,7 +41,16 @@ class WebServices {
   }
 
 
-  Future<List<Users>> getUsersLists() {
+  Future<List<Users>> getUsersLists(BuildContext context) {
+
+   // if(Utils.isInternetConnected()){
+     // Utils.showAlert(context, "Internet is Available.");
+   // }else{
+   //   Utils.showAlert(context, "No Internet.");
+   // }
+
+
+
     http.get(base_url + users).then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
@@ -43,7 +59,12 @@ class WebServices {
         // throw new Exception("Error while fetching data");
         _onFailureResponse(new Exception("Error while fetching data"));
       } else {
-        _onSuccessResponse(Users.fromJson(json.decode(res)));
+
+        final parsed = json.decode(res).cast<Map<String, dynamic>>();
+
+        List<Users> listUsers = parsed.map<Users>((json) => Users.fromJson(json)).toList();
+
+        _onSuccessResponse(listUsers);
       }
     });
   }
