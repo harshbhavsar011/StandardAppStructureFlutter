@@ -98,10 +98,6 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 20.0,
             ),
-            /*Text(
-              "Dont have an Account? Sign Up Here ",
-              style: TextStyle(fontSize: 16.0),
-            ),*/
             RichText(
               text: new TextSpan(children:
             <TextSpan>[
