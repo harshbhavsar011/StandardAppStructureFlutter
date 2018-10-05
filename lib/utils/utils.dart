@@ -7,20 +7,7 @@ import 'package:flutter/material.dart';
 class Utils {
 
 
-  static   bool isInternetAvailable = false;
 
-  static bool isInternetConnected()  {
-    checkConnection().then((connectionResult) {
-      if(connectionResult){
-        isInternetAvailable =  true;
-      }
-      else{
-        isInternetAvailable =  false;
-      }
-
-    });
-    return isInternetAvailable;
-    }
 
   static Future<bool> checkConnection() async{
 
@@ -35,10 +22,11 @@ class Utils {
     }
   }
 
-  static void showAlert(BuildContext context, String text) {
+  static void showAlert(BuildContext context,String title, String text) {
 
 
     var alert = new AlertDialog(
+      title:Text(title) ,
       content: Container(
         child: Row(
           children: <Widget>[Text(text)],

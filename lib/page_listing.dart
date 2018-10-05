@@ -63,10 +63,16 @@ class _MyAppState extends State<ListPage> implements ApiListener {
     setLoading(false);
   }
 
+
+  @override
+  void onNoInternetConnection() {
+    setLoading(false);
+
+  }
+
   @override
   void onApiSuccess(Object mObject) {
     setLoading(false);
-
 
     //Get All Users
     if (mObject is List<Users>) {

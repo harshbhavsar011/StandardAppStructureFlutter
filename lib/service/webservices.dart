@@ -41,32 +41,43 @@ class WebServices {
   }
 
 
+  /**
+   * This Function executed when internet connection is not available
+   */
+   void _onNoInternetConnection() {
+     mApiListener.onNoInternetConnection();
+  }
+
+
+
   Future<List<Users>> getUsersLists(BuildContext context) {
 
-   // if(Utils.isInternetConnected()){
-     // Utils.showAlert(context, "Internet is Available.");
-   // }else{
-   //   Utils.showAlert(context, "No Internet.");
-   // }
+    Utils.checkConnection().then((connectionResult) {
 
+      if(connectionResult){
+        http.get(base_url + users).then((http.Response response) {
+          final String res = response.body;
+          final int statusCode = response.statusCode;
 
+          if (statusCode < 200 || statusCode > 400 || json == null) {
+            _onFailureResponse(new Exception("Error while fetching data"));
+          } else {
 
-    http.get(base_url + users).then((http.Response response) {
-      final String res = response.body;
-      final int statusCode = response.statusCode;
-
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        // throw new Exception("Error while fetching data");
-        _onFailureResponse(new Exception("Error while fetching data"));
-      } else {
-
-        final parsed = json.decode(res).cast<Map<String, dynamic>>();
-
-        List<Users> listUsers = parsed.map<Users>((json) => Users.fromJson(json)).toList();
-
-        _onSuccessResponse(listUsers);
+            final parsed = json.decode(res).cast<Map<String, dynamic>>();
+            List<Users> listUsers = parsed.map<Users>((json) => Users.fromJson(json)).toList();
+            _onSuccessResponse(listUsers);
+          }
+        });
+      }
+      else{
+        _onNoInternetConnection();
+        Utils.showAlert(context, "WS call","Internet is not connected.");
       }
     });
+
+
+
+
   }
 
   void post(String url, {Map headers, body, encoding}) {
