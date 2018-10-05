@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/model/users.dart';
 import 'package:standardappstructure/service/apilistener.dart';
-import 'service/webservices.dart';
-import 'widgets/progressview.dart';
+import 'package:standardappstructure/service/webservices.dart';
+import 'package:standardappstructure/utils/utils.dart';
+import 'package:standardappstructure/widgets/progressview.dart';
+import 'package:splashscreen/splashscreen.dart';
+
 
 class ListPage extends StatefulWidget {
   bool isLoading = true;
-  String _data = "HAS";
-
   List<Users> usersData;
+  String titleToolbar;
+
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -17,28 +20,24 @@ class ListPage extends StatefulWidget {
 class _MyAppState extends State<ListPage> implements ApiListener {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     this.widget.usersData = new List();
-    //setLoading(true);
-    WebServices(this, true).getUsersLists(context) as List<Users>;
+
+    //Call Rest API for getting User list from server.
+    WebServices(this).getUsersLists(context) as List<Users>;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Ws Calls"),
-      ),
-      body: ProgressWidget(
-        inAsyncCall: this.widget.isLoading,
-        opacity: 0.5,
+      body: ProgressWidget(isShow: this.widget.isLoading, opacity: 0.5,
         child: _homeBody(),
       ),
     );
   }
 
+
+  //Home Body Widget to display list of data
   Widget _homeBody() {
     return ListView.builder(
         itemCount: this.widget.usersData.length,
@@ -58,18 +57,22 @@ class _MyAppState extends State<ListPage> implements ApiListener {
         });
   }
 
+  //Do you work If Internet is not available
   @override
   void onApiFailure(Exception exception) {
     setLoading(false);
+    Utils.showAlert(context, "Ws call", "Something went wrong.");
   }
 
 
+  //Do you work If Internet is not available
   @override
   void onNoInternetConnection() {
     setLoading(false);
-
   }
 
+
+  //Get All Webservices responses here through Object.
   @override
   void onApiSuccess(Object mObject) {
     setLoading(false);
@@ -82,6 +85,7 @@ class _MyAppState extends State<ListPage> implements ApiListener {
 
   }
 
+  //Progress Indicator On/Off
   void setLoading(bool loading) {
     setState(() {
       this.widget.isLoading = loading;
