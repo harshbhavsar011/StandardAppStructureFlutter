@@ -4,7 +4,6 @@ import 'package:standardappstructure/service/apilistener.dart';
 import 'package:standardappstructure/service/webservices.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/progressview.dart';
-import 'package:splashscreen/splashscreen.dart';
 
 
 class ListPage extends StatefulWidget {
