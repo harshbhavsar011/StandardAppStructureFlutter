@@ -1,21 +1,27 @@
 import "package:flutter/material.dart";
+import 'package:standardappstructure/widgets/custom_textfield.dart';
 
-class HomePage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            loginBody(),
-          ],
+      body: Container(
+        color: Colors.grey.shade200,
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              loginBody(),
+            ],
+          ),
         ),
       ),
     );
@@ -26,26 +32,19 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-              child: TextField(
-                maxLines: 1,
-                decoration: InputDecoration(
-                  hintText: "Enter your username",
-                  labelText: "Username",
-                ),
-              ),
+            BoxTextField(
+              controller: textEditingController,
+              hintText: "Enter email",
+              lableText: "Email",
+              obscure: false,
+              icon: Icons.email,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
-              child: TextField(
-                maxLines: 1,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Enter your password",
-                  labelText: "Password",
-                ),
-              ),
+            BoxTextField(
+              controller: textEditingController,
+              hintText: "Enter Password",
+              lableText: "Password",
+              obscure: true,
+              icon: Icons.lock_outline,
             ),
             SizedBox(
               height: 30.0,
@@ -57,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(12.0),
                 child: Text(
                   "Login",
-                  style: TextStyle(color: Colors.white,fontSize: 18.0),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
                 color: Colors.blue,
                 onPressed: () {},
@@ -70,7 +69,6 @@ class _HomePageState extends State<HomePage> {
               "Forgot Password?",
               style: TextStyle(fontSize: 16.0),
             ),
-
             SizedBox(
               height: 20.0,
             ),
@@ -98,15 +96,23 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 20.0,
             ),
-            RichText(
-              text: new TextSpan(children:
-            <TextSpan>[
-              new TextSpan(text: 'Dont have an Account?  ',style: new TextStyle(fontWeight: FontWeight.normal,
-                 color: Colors.black,
-                 fontSize: 16.0 )),
-              new TextSpan(text: ' Sign Up!', style: new TextStyle(fontWeight: FontWeight.bold,
-              color: Colors.blue,fontSize: 16.0 )),
-            ], ), )
+            Row(
+              children: <Widget>[
+                Text("Dont have an Account?",
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0)),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(" Sign Up!",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                          fontSize: 16.0)),
+                ),
+              ],
+            )
           ],
         ),
       );
@@ -129,7 +135,6 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         loginHeader(),
         loginFields(),
-
       ],
     );
   }

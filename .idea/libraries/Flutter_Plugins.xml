@@ -1,6 +1,9 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-    <CLASSES />
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.3.2" />
+      <root url="file://$PROJECT_DIR$/../flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.4.10" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>
