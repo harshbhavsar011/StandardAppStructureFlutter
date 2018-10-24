@@ -30,7 +30,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/icnfb.png
-    - assets/icons/icn_gmail.png
+    - assets/icons/icng.png
+    - assets/icons/imgforgot.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

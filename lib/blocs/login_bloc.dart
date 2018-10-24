@@ -16,6 +16,9 @@ class LoginBloc{
   final _password = BehaviorSubject<String>();
 
 
+  Stream<String> get email    => _email.stream.transform(validateEmail);
+  Stream<String> get password => _password.stream.transform(validatePassword);
+
   Function(String) get changeEmail    => _email.sink.add;
   Function(String) get changePassword => _password.sink.add;
   Stream<bool>   get submitValid => Observable.combineLatest2(_email, _password, (e, p) => true);
@@ -44,7 +47,9 @@ class LoginBloc{
   submit() {
     final validEmail    = _email.value;
     final validPassword = _password.value;
+
     print('$validEmail and $validPassword');
+
   }
 
   dispose() {
