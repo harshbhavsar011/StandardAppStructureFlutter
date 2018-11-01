@@ -39,7 +39,7 @@ class BoxTextField extends StatelessWidget {
                 top: 2.0, bottom: 2.0, left: 16.0, right: 16.0),
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
-            height: 60.0,
+            height: 55.0,
             decoration: new BoxDecoration(
                 color: Colors.grey.shade100,
                 border: new Border.all(color: Colors.grey.shade400, width: 1.0),

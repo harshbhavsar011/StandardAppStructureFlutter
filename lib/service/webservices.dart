@@ -35,8 +35,6 @@ class WebServices {
 
 // This Function will get list of users from web-server.
   void getUsersLists(BuildContext context) {
-
-
     // This Function will check Internet is available or not.
     Utils.checkConnection().then((connectionResult) {
 
@@ -57,7 +55,9 @@ class WebServices {
       }
       else{
         _onNoInternetConnection();
-        Utils.showAlert(context, "WS call","Internet is not connected.");
+        Utils.showAlert(context, "WS call","Internet is not connected.",(){
+          Navigator.pop(context);
+        });
       }
     });
   }

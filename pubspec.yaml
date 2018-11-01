@@ -8,7 +8,8 @@ dependencies:
   rxdart:
   validate: ^1.7.0
   image_picker: ^0.4.10
-
+  shared_preferences: "^0.4.2"
+  firebase_auth: ^0.6.2+1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -30,8 +31,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/icnfb.png
-    - assets/icons/icng.png
-    - assets/icons/imgforgot.png
+    - assets/icons/icngmail.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
