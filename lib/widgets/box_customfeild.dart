@@ -22,7 +22,6 @@ class BoxFeild extends StatefulWidget {
   final bool enabled;
   final IconData icon;
   final String hintText;
-  final String errorText;
   final String lableText;
   final double cursorWidth;
   final Radius cursorRadius;
@@ -66,7 +65,6 @@ class BoxFeild extends StatefulWidget {
     this.keyboardAppearance,
     this.scrollPadding,
     this.validator,
-    this.errorText,
     this.onFieldSubmitted,
   })  : assert(textAlign != null),
         assert(autofocus != null),
@@ -103,10 +101,13 @@ class _BoxFeildState extends State<BoxFeild> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(width: width / 30),
+          SizedBox(
+            width: width / 30,
+          ),
           Expanded(
               child: Container(
-            margin: const EdgeInsets.only(top: 2.0, bottom: 2.0, left: 8.0, right: 8.0),
+            margin: const EdgeInsets.only(
+                top: 2.0, bottom: 2.0, left: 8.0, right: 8.0),
             padding: const EdgeInsets.all(6.0),
             alignment: Alignment.center,
             height: 52.0,
@@ -121,10 +122,6 @@ class _BoxFeildState extends State<BoxFeild> {
               onFieldSubmitted: this.widget.onFieldSubmitted,
               decoration: new InputDecoration(
                   border: InputBorder.none,
-                  errorText: this.widget.errorText,
-                  errorStyle: TextStyle(
-                    fontSize: 16.0
-                  ),
                   prefixIcon: Icon(
                     this.widget.icon,
                     size: 24.0,
