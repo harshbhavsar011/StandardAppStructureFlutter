@@ -20,7 +20,7 @@ class Utils {
 
 
   static void showAlert(
-      BuildContext context, String title, String text, VoidCallback onPressed) {
+      BuildContext context, String title, String text, VoidCallback onPressed,bool cancelable) {
     var alert = AlertDialog(
 
       title: Text(title,overflow: TextOverflow.ellipsis,),
@@ -45,6 +45,7 @@ class Utils {
 
     showDialog(
         context: context,
+        barrierDismissible: cancelable,
         builder: (_) {
           return alert;
         });

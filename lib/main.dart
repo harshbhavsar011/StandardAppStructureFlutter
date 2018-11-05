@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/ui/introscreens/page_onboarding.dart';
 import 'package:standardappstructure/ui/page_dash.dart';
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => Dashboard(),
+        '/': (context) => LoginPage(),
         '/signup': (context) => PageSignUp(),
       },
     );

@@ -62,7 +62,7 @@ class _MyAppState extends State<ListPage> implements ApiListener {
     setLoading(false);
     Utils.showAlert(context, "Ws call", "Something went wrong.",(){
       Navigator.pop(context);
-    });
+    },true);
   }
 
 

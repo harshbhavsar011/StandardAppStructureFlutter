@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:standardappstructure/ui/page_signup.dart';
 import 'package:standardappstructure/utils/constants.dart';
+import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:standardappstructure/widgets/progressview.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,24 +20,54 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode _passFocusNode = new FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _email;
-  String _password;
+
+// Firebase
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
+
+  GoogleSignInAccount _googleUser;
+
+  String _email, _password;
+  bool isLoading = false;
+
+  Future<FirebaseUser> _googleSignIn() async {
+    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth =
+        await googleSignInAccount.authentication;
+
+    FirebaseUser firebaseUser = await _auth.signInWithGoogle(
+        idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+
+    print("Google User : ${firebaseUser.displayName}");
+    return firebaseUser;
+  }
+
+  void _googleSignOut() {
+    googleSignIn.signOut();
+    print("Google user Signed out");
+  }
+
+  //Progress Indicator On/Off
+  void setLoading(bool loading) {
+    setState(() {
+      isLoading = loading;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        color: Colors.grey.shade200,
-        child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              loginBody(),
-            ],
-          ),
-        ),
-      ),
+      body: ProgressWidget(
+          isShow: isLoading,
+          opacity: 0.6,
+          child: Container(
+              color: Colors.grey.shade200,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: loginBody(),
+                ),
+              ))),
     );
   }
 
@@ -96,12 +130,32 @@ class _LoginPageState extends State<LoginPage> {
           child: Image.asset("assets/icons/icnfb.png"),
         ),
         Padding(padding: EdgeInsets.only(left: 16.0, right: 16.0)),
-        CircleAvatar(
-          maxRadius: 24.0,
-          child: Image.asset("assets/icons/icngmail.png"),
+        GestureDetector(
+          onTap: () {
+            checkUser();
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.grey,
+            maxRadius: 24.0,
+            child: Image.asset("assets/icons/icngmail.png"),
+          ),
         )
       ],
     );
+  }
+
+  void checkUser() {
+    //Check if the user is signed in or not.
+    if (_auth.currentUser() != null) {
+      setState(() {
+        //if the user is signed in
+      });
+    } else {
+      //call signIn method to make the user sign In
+      _googleSignIn()
+          .then((FirebaseUser user) => print(user))
+          .catchError((e) => print(e));
+    }
   }
 
   Container _loginButtonWidget() {
@@ -197,17 +251,63 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
       _formKey.currentState.save();
       // Go to Dashboard
+      Utils.checkConnection().then((connectionResult) {
+        if (connectionResult) {
+          setLoading(true);
+          handleSignInEmail(_email, _password).then((FirebaseUser user) {
+            print(user);
+            setLoading(false);
+
+            Utils.showAlert(context, "Flutter", "Successfully logged In with ${user.email}",
+                    () {
+                  Navigator.pop(context);
+                },true);
+          })
+            ..catchError((e) {
+
+              setLoading(false);
+              Utils.showAlert(context, "Flutter", "User not found please signup first.",
+                      () {
+                    Navigator.pop(context);
+                  },true);
+            });
+        } else {
+          Utils.showAlert(context, "Flutter",
+              "Internet is not connected. Please check internet connection.",
+              () {
+            Navigator.pop(context);
+          },true);
+        }
+      });
     } else {
 //    If all data are not valid then start auto validation.
       setState(() {
         _autoValidate = true;
       });
+    }
+  }
+
+  Future<FirebaseUser> handleSignInEmail(String email, String password) async {
+    final FirebaseUser user = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    if (user == null) {
+      setLoading(false);
+      Utils.showAlert(context, "Flutter", "User not found please signup first.",
+          () {
+        Navigator.pop(context);
+      },true);
+    } else {
+      assert(await user.getIdToken() != null);
+      final FirebaseUser currentUser = await _auth.currentUser();
+      assert(user.uid == currentUser.uid);
+      print('signInEmail succeeded: $user');
+      return user;
     }
   }
 

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/ui/page_login.dart';
 import 'package:standardappstructure/utils/constants.dart';
+import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
 
@@ -15,6 +17,19 @@ class _PageSignUpState extends State<PageSignUp> {
 
   bool _autoValidate = false;
   String _name, _email, _phoneNo, _password, _confirmPassoword;
+  bool isLoading = false;
+
+// Firebase
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FocusNode _nameFocusNode = new FocusNode();
+  FocusNode _emailFocusNode = new FocusNode();
+  FocusNode _phoneNoFocusNode = new FocusNode();
+  FocusNode _passFocusNode = new FocusNode();
+  FocusNode _cofirmpassFocusNode = new FocusNode();
+
+  final _passwordController = TextEditingController();
+  final _confirmPassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,24 +38,27 @@ class _PageSignUpState extends State<PageSignUp> {
       body: Container(
         color: Colors.grey.shade200,
         child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Form(
-                  key: _formKey,
-                  autovalidate: _autoValidate,
-                  child: Column(
-                    children: <Widget>[
-                      _nameWidget(),
-                      _emailWidget(),
-                      _phoneWidget(),
-                      _passwordWidget(),
-                      _confirmPassWidget(),
-                      SizedBox(height: 30.0),
-                      _signUpButtonWidget()
-                    ],
-                  )),
-            ],
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Form(
+                      key: _formKey,
+                      autovalidate: _autoValidate,
+                      child: Column(
+                        children: <Widget>[
+                          _nameWidget(),
+                          _emailWidget(),
+                          _passwordWidget(),
+                          _confirmPassWidget(),
+                          SizedBox(height: 30.0),
+
+                        ],
+                      )),
+                  _signUpButtonWidget()
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -59,6 +77,7 @@ class _PageSignUpState extends State<PageSignUp> {
         ),
         color: Colors.blue,
         onPressed: () {
+          setLoading(true);
           _validateInputs();
         },
       ),
@@ -70,6 +89,7 @@ class _PageSignUpState extends State<PageSignUp> {
       hintText: "Confirm Password",
       lableText: "Confirm Password",
       obscureText: true,
+      controller: _confirmPassController,
       icon: Icons.lock_outline,
       validator: validatePasswordMatching,
       onSaved: (String val) {
@@ -85,22 +105,10 @@ class _PageSignUpState extends State<PageSignUp> {
       lableText: "Password",
       obscureText: true,
       icon: Icons.lock_outline,
+      controller: _passwordController,
       validator: validatePassword,
       onSaved: (String val) {
-        _name = val;
-      },
-    );
-  }
-
-  BoxFeild _phoneWidget() {
-    return BoxFeild(
-      hintText: "Enter Mobile Number",
-      lableText: "Mobile Number",
-      keyboardType: TextInputType.phone,
-      icon: Icons.phone,
-      validator: validateMobile,
-      onSaved: (String val) {
-        _phoneNo = val;
+        _password = val;
       },
     );
   }
@@ -152,19 +160,6 @@ class _PageSignUpState extends State<PageSignUp> {
     return null;
   }
 
-  String validateMobile(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = RegExp(patttern);
-    if (value.length == 0) {
-      return "Phone number is Required";
-    } else if (value.length != 10) {
-      return "Phone number must 10 digits";
-    } else if (!regExp.hasMatch(value)) {
-      return "Phone Number must be digits";
-    }
-    return null;
-  }
-
   String validatePassword(String value) {
     if (value.length == 0) {
       return "Password is Required";
@@ -173,6 +168,14 @@ class _PageSignUpState extends State<PageSignUp> {
     }
     return null;
   }
+
+  String validateConfirmPassword(String value) {
+    if (value.length == 0) {
+      return "Password is Required";
+    }
+    return null;
+  }
+
 
   String validatePasswordMatching(String value) {
     var password = passKey.currentState.value;
@@ -185,15 +188,66 @@ class _PageSignUpState extends State<PageSignUp> {
     return null;
   }
 
+
+
+  /*bool validatePasswordMatching() {
+
+    if (_passwordController.text != _confirmPassController.text) {
+      Utils.showAlert(context, "Flutter", "Passwords are not matched.", () {
+        Navigator.pop(context);
+      },true);
+      return false;
+    } else {
+      return true;
+    }
+  }*/
+
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
-      _formKey.currentState.save();
       //Make a REST Api Call with success Go to Login Page after User Created.
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+
+        _formKey.currentState.save();
+
+
+        Utils.checkConnection().then((connectionResult) {
+          if (connectionResult) {
+            firebaseSignUp();
+          } else {
+            setLoading(false);
+            Utils.showAlert(context, "Flutter",
+                "Internet is not connected. Please check internet connection.",
+                    () {
+                  Navigator.pop(context);
+                },true);
+          }
+        });
+
+
+        /*if (validatePasswordMatching()) {
+
+          Utils.checkConnection().then((connectionResult) {
+            if (connectionResult) {
+              firebaseSignUp();
+            } else {
+              setLoading(false);
+              Utils.showAlert(context, "Flutter",
+                  "Internet is not connected. Please check internet connection.",
+                      () {
+                    Navigator.pop(context);
+                  },true);
+            }
+          });
+        }else{
+          setLoading(false);
+          setState(() {
+            _autoValidate = true;
+          });
+        }*/
+
+
+
+
     } else {
 //    If all data are not valid then start auto validation.
       setState(() {
@@ -202,5 +256,45 @@ class _PageSignUpState extends State<PageSignUp> {
     }
   }
 
+  void firebaseSignUp() {
+    setLoading(true);
+    handleSignUp(_email, _password).then((FirebaseUser user) {
+      print(user);
+      setLoading(false);
 
+      Utils.showAlert(context, "Flutter", "You have registered successfully.",
+          () {
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      },false);
+    })
+      ..catchError((e) {
+        setLoading(false);
+        Utils.showAlert(
+            context, "Flutter", "User is already registred with this Email-ID.",
+            () {
+          Navigator.pop(context);
+        },true);
+      });
+  }
+
+  //Progress Indicator On/Off
+  void setLoading(bool loading) {
+    setState(() {
+      isLoading = loading;
+    });
+  }
+
+  Future<FirebaseUser> handleSignUp(email, password) async {
+    final FirebaseUser user = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    assert(user != null);
+    assert(await user.getIdToken() != null);
+
+    return user;
+  }
 }

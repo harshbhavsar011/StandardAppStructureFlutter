@@ -57,7 +57,7 @@ class WebServices {
         _onNoInternetConnection();
         Utils.showAlert(context, "WS call","Internet is not connected.",(){
           Navigator.pop(context);
-        });
+        },true);
       }
     });
   }

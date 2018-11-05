@@ -7,6 +7,7 @@ abstract class BaseAuth {
   Future<String> signIn(String email, String password);
   Future<String> createUser(String email, String password);
   Future<void> signOut();
+
 }
 
 class Auth implements BaseAuth {
