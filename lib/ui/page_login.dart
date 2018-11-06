@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:standardappstructure/ui/page_forgot_pass.dart';
 import 'package:standardappstructure/ui/page_signup.dart';
 import 'package:standardappstructure/utils/constants.dart';
 import 'package:standardappstructure/utils/utils.dart';
@@ -84,7 +87,14 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 30.0),
                 _loginButtonWidget(),
                 SizedBox(height: 16.0),
-                Text("Forgot Password?", style: TextStyle(fontSize: 16.0)),
+                GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PageForgotPassword()),
+                      );
+                    },
+                    child: Text("Forgot Password?", style: TextStyle(fontSize: 16.0))),
                 SizedBox(height: 16.0),
                 Divider(height: 4.0, color: Colors.grey),
                 SizedBox(height: 16.0),
@@ -154,7 +164,9 @@ class _LoginPageState extends State<LoginPage> {
       //call signIn method to make the user sign In
       _googleSignIn()
           .then((FirebaseUser user) => print(user))
-          .catchError((e) => print(e));
+          .catchError((e) {
+            print(e);
+      });
     }
   }
 
