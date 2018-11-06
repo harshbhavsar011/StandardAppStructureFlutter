@@ -34,7 +34,7 @@ class WebServices {
 
 
 // This Function will get list of users from web-server.
-  void getUsersLists(BuildContext context) {
+  void  getUsersLists(BuildContext context) {
     // This Function will check Internet is available or not.
     Utils.checkConnection().then((connectionResult) {
 
@@ -55,14 +55,14 @@ class WebServices {
       }
       else{
         _onNoInternetConnection();
-        Utils.showAlert(context, "WS call","Internet is not connected.",(){
+        Utils.showAlert(context, "Flutter","Internet is not connected.",(){
           Navigator.pop(context);
         },true);
       }
     });
   }
 
-  void post(String url, {Map headers, body, encoding}) {
+  void createPost(String url, {Map headers, body, encoding}) {
     http
         .post(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -76,4 +76,37 @@ class WebServices {
       }
     });
   }
+
+
+  void createPostCall(BuildContext context, var body) {
+    // This Function will check Internet is available or not.
+    Utils.checkConnection().then((connectionResult) {
+      if (connectionResult) {
+        http.post(Constants.BASE_URL + Constants.POSTS,
+            body: body,
+            headers: {
+              "Accept": "application/json",
+              "content-type": "application/json"
+            }).then((http.Response response) {
+          final String res = response.body;
+          final int statusCode = response.statusCode;
+
+          if (statusCode < 200 || statusCode > 400 || json == null) {
+              _onFailureResponse(new Exception("Error while fetching data"));
+          } else {
+            final Map parsed = json.decode(res);
+          /*  SignUpResponse signUpResponse = SignUpResponse.fromJson(parsed);
+            _onSuccessResponse(signUpResponse);*/
+          }
+        });
+      } else {
+        _onNoInternetConnection();
+        Utils.showAlert(context, "Flutter", "Internet is not connected.", () {
+          Navigator.pop(context);
+        },true);
+      }
+    });
+  }
+
+
 }
