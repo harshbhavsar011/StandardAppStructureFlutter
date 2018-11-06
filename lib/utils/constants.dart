@@ -10,8 +10,11 @@ class Constants{
   static const Color clr_light_grey = const Color(0xAAD3D3D3);
 
   //Webservices list
-  static const String BASE_URL = "https://reqres.in/";
+  static const String BASE_URL = "https://jsonplaceholder.typicode.com/";
   static const String USERS = "users";
+  static const String PHOTOS = "photos";
+  static const String POSTS = "posts";
+  static const String COMMENTS = "comments";
 
   //Validations REGEX
   static final String PATTERN_EMAIL = "^([0-9a-zA-Z]([-.+\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})\$";
