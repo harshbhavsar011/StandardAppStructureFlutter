@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:standardappstructure/ui/page_bank_list.dart';
 import 'package:standardappstructure/ui/page_listing.dart';
 
 class Dashboard extends StatefulWidget {
@@ -9,6 +10,11 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -37,23 +43,32 @@ class _DashboardState extends State<Dashboard> {
           children: <Widget>[
             makeDashboardItem(
                 "Users",
+                width,
                 Icons.person,
                 gradientBankCard(Color.fromRGBO(230, 79, 149, 1.0),
                     Color.fromRGBO(229, 79, 140, 0.7)),(){
+
+              print ("Size of Devce W x H : ${width} x ${height} ");
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ListPage()),
               );
             }),
             makeDashboardItem(
-                "Posts",
+                "Banks",
+                width,
                 Icons.featured_play_list,
                 gradientBankCard(Color.fromRGBO(140, 128, 255, 1.0),
                     Color.fromRGBO(140, 128, 255, 0.8)),(){
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BankListPage()),
+              );
             }),
             makeDashboardItem(
                 "Countries",
+                width,
                 Icons.flag,
                 gradientBankCard(Color.fromRGBO(255, 138, 50, 1.0),
                     Color.fromRGBO(255, 138, 50, 0.8)),(){
@@ -61,6 +76,7 @@ class _DashboardState extends State<Dashboard> {
             }),
             makeDashboardItem(
                 "Comments",
+                width,
                 Icons.alarm,
                 gradientBankCard(Color.fromRGBO(134, 146, 160, 1.0),
                     Color.fromRGBO(134, 146, 160, 0.9)),(){
@@ -68,6 +84,7 @@ class _DashboardState extends State<Dashboard> {
             }),
             makeDashboardItem(
                 "Albums",
+                width,
                 Icons.photo_album,
                 gradientBankCard(Color.fromRGBO(78, 152, 254, 1.0),
                     Color.fromRGBO(84, 187, 251, 1.0)),(){
@@ -90,10 +107,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Card makeDashboardItem(
-      String title, IconData icon, LinearGradient linearGradient,VoidCallback onTap) {
+      String title, final width,IconData icon, LinearGradient linearGradient,VoidCallback onTap,) {
     return Card(
         elevation: 6.0,
-        margin: new EdgeInsets.all(10.0),
+        margin: new EdgeInsets.all(width * 0.05),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
         child: Container(

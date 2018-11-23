@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:standardappstructure/ui/page_signup.dart';
@@ -7,11 +8,14 @@ import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:standardappstructure/widgets/progressview.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
+
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = new TextEditingController();
@@ -20,10 +24,12 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode _passFocusNode = new FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-
+  bool isLoggedIn = false;
+  var profileData;
 // Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
+  var facebookLogin = FacebookLogin();
 
   GoogleSignInAccount _googleUser;
 
@@ -125,9 +131,16 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircleAvatar(
-          maxRadius: 24.0,
-          child: Image.asset("assets/icons/icnfb.png"),
+        GestureDetector(
+           /* onTap: () => facebookLogin.isLoggedIn
+                .then((isLoggedIn) => isLoggedIn ? facebookLogout() : {})*/
+
+           onTap: ()=> initiateFacebookLogin()
+          ,
+          child: CircleAvatar(
+            maxRadius: 24.0,
+            child: Image.asset("assets/icons/icnfb.png"),
+          ),
         ),
         Padding(padding: EdgeInsets.only(left: 16.0, right: 16.0)),
         GestureDetector(
@@ -149,6 +162,8 @@ class _LoginPageState extends State<LoginPage> {
     if (_auth.currentUser() != null) {
       setState(() {
         //if the user is signed in
+        print('Already signed In');
+        googleSignIn.signOut();
       });
     } else {
       //call signIn method to make the user sign In
@@ -310,6 +325,44 @@ class _LoginPageState extends State<LoginPage> {
       return user;
     }
   }
+
+  void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
+    setState(() {
+      this.isLoggedIn = isLoggedIn;
+      this.profileData = profileData;
+    });
+  }
+
+  facebookLogout() async {
+    await facebookLogin.logOut();
+    onLoginStatusChanged(false);
+    print("Logged out");
+  }
+
+
+    void initiateFacebookLogin() async {
+      var facebookLoginResult =
+      await facebookLogin.logInWithReadPermissions(['email']);
+
+      switch (facebookLoginResult.status) {
+        case FacebookLoginStatus.error:
+          onLoginStatusChanged(false);
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          onLoginStatusChanged(false);
+          break;
+        case FacebookLoginStatus.loggedIn:
+          var graphResponse = await http.get(
+              'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult
+                  .accessToken.token}');
+          var profile = json.decode(graphResponse.body);
+          print(profile.toString());
+
+          onLoginStatusChanged(true, profileData: profile);
+          break;
+      }
+    }
+
 
 
 }

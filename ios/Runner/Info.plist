@@ -41,20 +41,28 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
 	<key>CFBundleURLTypes</key>
-    <array>
-    	<dict>
-    		<key>CFBundleTypeRole</key>
-    		<string>Editor</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-    			<!-- TODO Replace this value: -->
-    			<!-- Copied from GoogleServices-Info.plist key REVERSED_CLIENT_ID -->
-    			<string>com.googleusercontent.apps.316829363571-p8m3rv9ma0vbigip95cs2kb6dn73fill</string>
-    		</array>
-    	</dict>
-    </array>
-
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.316829363571-p8m3rv9ma0vbigip95cs2kb6dn73fill</string>
+				<string>fb314273615846076</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>314273615846076</string>
+	<key>FacebookDisplayName</key>
+	<string>FlutterStructure</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 </dict>
 </plist>

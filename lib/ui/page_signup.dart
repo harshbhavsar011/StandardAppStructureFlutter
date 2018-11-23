@@ -176,7 +176,7 @@ class _PageSignUpState extends State<PageSignUp> {
     return null;
   }
 
-
+//https://restcountries.eu/rest/v2/all
   String validatePasswordMatching(String value) {
     var password = passKey.currentState.value;
 
@@ -204,7 +204,7 @@ class _PageSignUpState extends State<PageSignUp> {
 
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
-//    If all data are correct then save data to out variables
+      //If all data are correct then save data to out variables
       //Make a REST Api Call with success Go to Login Page after User Created.
 
         _formKey.currentState.save();
