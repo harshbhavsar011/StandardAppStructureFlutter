@@ -11,6 +11,8 @@ class Constants{
 
   //Webservices list
   static const String BASE_URL = "https://jsonplaceholder.typicode.com/";
+  static const String PHOTOSURL = "https://api.unsplash.com/";
+
   static const String USERS = "users";
   static const String PHOTOS = "photos";
   static const String POSTS = "posts";
@@ -21,6 +23,8 @@ class Constants{
   //Colors
 
 
+  //URL For list of photos
+  static const String accessKey = "f96abcd230664d7cab7ed900470db93878d44b15d672603e8c6817a267a96c78";
 
 
 }

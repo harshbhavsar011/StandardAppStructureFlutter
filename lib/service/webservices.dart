@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:standardappstructure/model/photos.dart';
 import 'package:standardappstructure/model/users.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:standardappstructure/service/apilistener.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/utils/constants.dart';
-
 
 class WebServices {
   ApiListener mApiListener;
@@ -26,20 +26,19 @@ class WebServices {
     mApiListener.onApiFailure(mThrowable);
   }
 
-
   // This Function executed when internet connection is not available
-   void _onNoInternetConnection() {
-     mApiListener.onNoInternetConnection();
+  void _onNoInternetConnection() {
+    mApiListener.onNoInternetConnection();
   }
 
-
 // This Function will get list of users from web-server.
-  void  getUsersLists(BuildContext context) {
+  void getUsersLists(BuildContext context) {
     // This Function will check Internet is available or not.
     Utils.checkConnection().then((connectionResult) {
-
-      if(connectionResult){
-        http.get(Constants.BASE_URL + Constants.USERS).then((http.Response response) {
+      if (connectionResult) {
+        http
+            .get(Constants.BASE_URL + Constants.USERS)
+            .then((http.Response response) {
           final String res = response.body;
           final int statusCode = response.statusCode;
 
@@ -48,16 +47,16 @@ class WebServices {
           } else {
             //Parsing json response to particular Object.
             final parsed = json.decode(res).cast<Map<String, dynamic>>();
-            List<Users> listUsers = parsed.map<Users>((json) => Users.fromJson(json)).toList();
+            List<Users> listUsers =
+                parsed.map<Users>((json) => Users.fromJson(json)).toList();
             _onSuccessResponse(listUsers);
           }
         });
-      }
-      else{
+      } else {
         _onNoInternetConnection();
-        Utils.showAlert(context, "Flutter","Internet is not connected.",(){
+        Utils.showAlert(context, "Flutter", "Internet is not connected.", () {
           Navigator.pop(context);
-        },true);
+        }, true);
       }
     });
   }
@@ -77,25 +76,22 @@ class WebServices {
     });
   }
 
-
   void createPostCall(BuildContext context, var body) {
     // This Function will check Internet is available or not.
     Utils.checkConnection().then((connectionResult) {
       if (connectionResult) {
-        http.post(Constants.BASE_URL + Constants.POSTS,
-            body: body,
-            headers: {
-              "Accept": "application/json",
-              "content-type": "application/json"
-            }).then((http.Response response) {
+        http.post(Constants.BASE_URL + Constants.POSTS, body: body, headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        }).then((http.Response response) {
           final String res = response.body;
           final int statusCode = response.statusCode;
 
           if (statusCode < 200 || statusCode > 400 || json == null) {
-              _onFailureResponse(new Exception("Error while fetching data"));
+            _onFailureResponse(new Exception("Error while fetching data"));
           } else {
             final Map parsed = json.decode(res);
-          /*  SignUpResponse signUpResponse = SignUpResponse.fromJson(parsed);
+            /*  SignUpResponse signUpResponse = SignUpResponse.fromJson(parsed);
             _onSuccessResponse(signUpResponse);*/
           }
         });
@@ -103,10 +99,39 @@ class WebServices {
         _onNoInternetConnection();
         Utils.showAlert(context, "Flutter", "Internet is not connected.", () {
           Navigator.pop(context);
-        },true);
+        }, true);
       }
     });
   }
 
+  // This Function will get list of Photos from web-server.
+  void getListOfPhotos(BuildContext context) {
+    Utils.checkConnection().then((connectionResult) {
+      if (connectionResult) {
+        http.get(
+          Constants.PHOTOSURL + Constants.PHOTOS,
+          headers: {
+            'Authorization': "Client-ID " + Constants.accessKey,
+          },
+        ).then((http.Response response) {
+          final String res = response.body;
+          final int statusCode = response.statusCode;
 
+          if (statusCode < 200 || statusCode > 400 || json == null) {
+            _onFailureResponse(new Exception("Error while fetching data"));
+          } else {
+            final parsed = json.decode(res).cast<Map<String, dynamic>>();
+            List<PhotoResponse> photosList =
+                parsed.map<PhotoResponse>((json) => PhotoResponse.fromJson(json)).toList();
+            _onSuccessResponse(photosList);
+          }
+        });
+      } else {
+        _onNoInternetConnection();
+        Utils.showAlert(context, "Flutter", "Internet is not connected.", () {
+          Navigator.pop(context);
+        }, true);
+      }
+    });
+  }
 }

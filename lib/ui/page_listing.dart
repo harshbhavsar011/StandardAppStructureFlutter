@@ -60,7 +60,9 @@ class _MyAppState extends State<ListPage> implements ApiListener {
           //  return new Text(this.widget.usersData[index].name);
           return Container(
             child: new ListTile(
-              onTap: null,
+              onTap: (){
+
+              },
               contentPadding: EdgeInsets.all(16.0),
               leading: new CircleAvatar(
                 backgroundColor: Color.fromRGBO(230, 79, 149, 0.9),
