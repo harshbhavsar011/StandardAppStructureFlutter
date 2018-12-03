@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:standardappstructure/model/photos.dart';
 import 'package:standardappstructure/service/apilistener.dart';
 import 'package:standardappstructure/service/webservices.dart';
+import 'package:standardappstructure/ui/full_image_view.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/progressview.dart';
 
@@ -63,11 +64,22 @@ class _PhotosListState extends State<PhotosList> implements ApiListener {
         crossAxisCount: 4,
         itemCount: photoList.length,
         itemBuilder: (BuildContext context, int index) => Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                image: DecorationImage(
-                    image: NetworkImage(photoList[index].urls.small),
-                    fit: BoxFit.cover))),
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FullImageView(photoList[index].user.name,photoList[index].urls.small)),
+              );
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                        image: NetworkImage(photoList[index].urls.small),
+                        fit: BoxFit.cover))),
+            ),
+          ),
+
         staggeredTileBuilder: (int index) =>
             StaggeredTile.count(2, index.isEven ? 2 : 3),
         mainAxisSpacing: 4.0,

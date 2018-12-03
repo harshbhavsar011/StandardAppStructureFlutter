@@ -67,6 +67,21 @@ class _DashboardState extends State<Dashboard> {
                 MaterialPageRoute(builder: (context) => BankListPage()),
               );
             }),
+
+            makeDashboardItem(
+                "Photos",
+                width,
+                Icons.photo_album,
+                gradientBankCard(Color.fromRGBO(78, 152, 254, 1.0),
+                    Color.fromRGBO(84, 187, 251, 1.0)),(){
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PhotosList()),
+              );
+
+            }),
+
             makeDashboardItem(
                 "Countries",
                 width,
@@ -83,19 +98,7 @@ class _DashboardState extends State<Dashboard> {
                     Color.fromRGBO(134, 146, 160, 0.9)),(){
 
             }),
-            makeDashboardItem(
-                "Photos",
-                width,
-                Icons.photo_album,
-                gradientBankCard(Color.fromRGBO(78, 152, 254, 1.0),
-                    Color.fromRGBO(84, 187, 251, 1.0)),(){
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PhotosList()),
-              );
-
-            }),
             // makeDashboardItem("Posts", Icons.featured_play_list,gradientBankCard(Color.fromRGBO(44, 178, 155,1.0),  Color.fromRGBO(44, 178, 155,0.7))),
           ],
         ),

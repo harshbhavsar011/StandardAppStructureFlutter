@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:standardappstructure/utils/utils.dart';
 
 class ProgressWidget extends StatelessWidget {
-
   final Widget child;
   final bool isShow;
   final double opacity;
@@ -19,19 +23,23 @@ class ProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = new List<Widget>();
+    List<Widget> widgetList = List<Widget>();
     widgetList.add(child);
     if (isShow) {
-      final modal = new Stack(
+      final modal = Stack(
         children: [
-          new Opacity(
+          Opacity(
             opacity: opacity,
             child: ModalBarrier(dismissible: false, color: color),
           ),
-          new Center(
-            child: new CircularProgressIndicator(
-              valueColor: valueColor,
-            ),
+          Center(
+            child: Utils.isAndroidPlatform()
+                ? CircularProgressIndicator(
+                    valueColor: valueColor,
+                  )
+                : CupertinoActivityIndicator(
+                    animating: true,
+                  ),
           ),
         ],
       );

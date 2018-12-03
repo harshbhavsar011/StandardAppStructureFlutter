@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/utils/constants.dart';
@@ -15,7 +16,15 @@ class Utils {
       return false;
     }
   }
-
+  static bool isAndroidPlatform(){
+    if (Platform.isAndroid) {
+      return true;
+      // Android-specific code
+    } else if (Platform.isIOS) {
+      // iOS-specific code
+      return false;
+    }
+  }
 
 
 
