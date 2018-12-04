@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:standardappstructure/model/childitem.dart';
 import 'package:standardappstructure/model/users.dart';
 import 'package:standardappstructure/service/apilistener.dart';
 import 'package:standardappstructure/service/webservices.dart';
@@ -21,7 +22,6 @@ class _MyAppState extends State<ListPage> implements ApiListener {
   void initState() {
     super.initState();
     this.widget.usersData = new List();
-
     Utils.checkConnection().then((connectionResult) {
       if (connectionResult) {
         //Call Rest API for getting User list from server.
@@ -32,12 +32,20 @@ class _MyAppState extends State<ListPage> implements ApiListener {
     });
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(230, 79, 149, 1.0),
         title: Text("Users"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search),onPressed:(){
+
+    })
+        ],
       ),
       body: internetCheck
           ? ProgressWidget(

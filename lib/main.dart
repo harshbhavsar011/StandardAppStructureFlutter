@@ -11,7 +11,51 @@ import 'package:standardappstructure/utils/sharedprefutils.dart';
 void main() => runApp(defaultTargetPlatform == TargetPlatform.iOS ? IOSApp() : AndroidApp());
 
 
-class IOSApp extends StatelessWidget {
+class IOSApp extends StatefulWidget {
+  @override
+  IOSAppState createState() {
+    return new IOSAppState();
+  }
+
+
+
+
+
+}
+
+class IOSAppState extends State<IOSApp> {
+  Widget firstScreen;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firstScreen = LoginPage();
+    /*SharedPreferencesUtils.getOnBoardScreen().then((value) {
+      if (value) {
+        //Navigate to OnBoarding Screen.
+        //Navigate to OnBoarding First Time..
+        firstScreen = OnboardingMainPage();
+      } else {
+
+        SharedPreferencesUtils.getLogin().then((value) {
+          if (value) {
+            //Navigate to DashBoard If user already logged In.
+            firstScreen = Dashboard();
+          }else{
+            firstScreen = LoginPage();
+          }
+
+        });
+
+
+
+      }
+    });*/
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,16 +63,42 @@ class IOSApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Dashboard(),
-        '/signup': (context) => PageSignUp(),
-      },
+      home: firstScreen,
     );
   }
 }
 
-class AndroidApp extends StatelessWidget {
+class AndroidApp extends StatefulWidget {
+  @override
+  AndroidAppState createState() {
+    return new AndroidAppState();
+  }
+}
+
+class AndroidAppState extends State<AndroidApp> {
+
+
+  Widget firstScreen;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SharedPreferencesUtils.getOnBoardScreen().then((value) {
+      if (value) {
+        //Navigate to OnBoarding Screen.
+        //Navigate to OnBoarding First Time..
+        firstScreen = OnboardingMainPage();
+      } else {
+        firstScreen = LoginPage();
+      }
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,11 +106,7 @@ class AndroidApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Dashboard(),
-        '/signup': (context) => PageSignUp(),
-      },
+        home: firstScreen
     );
   }
 }

@@ -96,11 +96,12 @@ class _OnboardingMainPageState extends State<OnboardingMainPage> {
                 onPressed: isLastPage
                     ? () {
                         // Last Page Done Click
-                        SharedPreferencesUtils.setOnBoardingVisibility(true);
+                        SharedPreferencesUtils.setOnBoardScreen(false);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => LoginPage()),
                         );
+
                       }
                     : () {
                         _controller.animateToPage(currentPageIndex + 1,

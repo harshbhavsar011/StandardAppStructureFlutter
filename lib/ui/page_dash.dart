@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/ui/page_bank_list.dart';
 import 'package:standardappstructure/ui/page_listing.dart';
+import 'package:standardappstructure/ui/page_login.dart';
 import 'package:standardappstructure/ui/page_photos_list.dart';
+import 'package:standardappstructure/utils/sharedprefutils.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -27,9 +29,18 @@ class _DashboardState extends State<Dashboard> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Icon(
-              Icons.exit_to_app,
-              color: Colors.black87,
+            child: GestureDetector(
+              onTap: (){
+                SharedPreferencesUtils.setLogin(false);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: Icon(
+                Icons.exit_to_app,
+                color: Colors.black87,
+              ),
             ),
           )
         ],

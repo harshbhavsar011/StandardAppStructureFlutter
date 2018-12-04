@@ -191,8 +191,8 @@ class _PageSignUpState extends State<PageSignUp> {
   }
 
 
-
-  /*bool validatePasswordMatching() {
+/*
+  bool validatePasswordMatching() {
 
     if (_passwordController.text != _confirmPassController.text) {
       Utils.showAlert(context, "Flutter", "Passwords are not matched.", () {

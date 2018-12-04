@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:standardappstructure/ui/introscreens/page_onboarding.dart';
+import 'package:standardappstructure/ui/page_dash.dart';
 import 'package:standardappstructure/ui/page_forgot_pass.dart';
 import 'package:standardappstructure/ui/page_signup.dart';
 import 'package:standardappstructure/utils/constants.dart';
+import 'package:standardappstructure/utils/sharedprefutils.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
@@ -288,10 +291,13 @@ class _LoginPageState extends State<LoginPage> {
             print(user);
             setLoading(false);
 
-            Utils.showAlert(context, "Flutter", "Successfully logged In with ${user.email}",
-                    () {
-                  Navigator.pop(context);
-                },true);
+
+
+            SharedPreferencesUtils.setLogin(true);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Dashboard()),
+            );
           })
             ..catchError((e) {
 
