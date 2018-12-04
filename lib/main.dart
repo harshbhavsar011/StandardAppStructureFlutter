@@ -32,7 +32,7 @@ class IOSAppState extends State<IOSApp> {
     // TODO: implement initState
     super.initState();
     firstScreen = LoginPage();
-    /*SharedPreferencesUtils.getOnBoardScreen().then((value) {
+    SharedPreferencesUtils.getOnBoardScreen().then((value) {
       if (value) {
         //Navigate to OnBoarding Screen.
         //Navigate to OnBoarding First Time..
@@ -46,13 +46,9 @@ class IOSAppState extends State<IOSApp> {
           }else{
             firstScreen = LoginPage();
           }
-
         });
-
-
-
       }
-    });*/
+    });
   }
 
 
@@ -77,9 +73,7 @@ class AndroidApp extends StatefulWidget {
 
 class AndroidAppState extends State<AndroidApp> {
 
-
   Widget firstScreen;
-
 
   @override
   void initState() {

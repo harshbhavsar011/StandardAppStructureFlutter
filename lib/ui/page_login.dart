@@ -346,6 +346,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
+
+      if(isLoggedIn){
+        SharedPreferencesUtils.setLogin(true);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()),
+        );
+      }
     });
   }
 

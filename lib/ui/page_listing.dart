@@ -32,9 +32,6 @@ class _MyAppState extends State<ListPage> implements ApiListener {
     });
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
