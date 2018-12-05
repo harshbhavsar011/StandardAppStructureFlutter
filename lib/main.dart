@@ -44,7 +44,7 @@ class IOSAppState extends State<IOSApp> {
             //Navigate to DashBoard If user already logged In.
             firstScreen = Dashboard();
           }else{
-            firstScreen = LoginPage();
+            firstScreen = Dashboard();
           }
         });
       }

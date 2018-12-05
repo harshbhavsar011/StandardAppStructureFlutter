@@ -6,7 +6,8 @@ dependencies:
     sdk: flutter
   connectivity:
   http: ^0.12.0
-  rxdart:
+  path_provider:
+  simple_permissions:
   validate: ^1.7.0
   image_picker: ^0.4.10
   shared_preferences: "^0.4.2"

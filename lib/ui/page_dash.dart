@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/ui/page_bank_list.dart';
+import 'package:standardappstructure/ui/page_gallery.dart';
 import 'package:standardappstructure/ui/page_listing.dart';
 import 'package:standardappstructure/ui/page_login.dart';
 import 'package:standardappstructure/ui/page_photos_list.dart';
@@ -94,15 +95,23 @@ class _DashboardState extends State<Dashboard> {
             }),
 
             makeDashboardItem(
-                "Countries",
+                "Gallery",
                 width,
                 Icons.flag,
                 gradientBankCard(Color.fromRGBO(255, 138, 50, 1.0),
                     Color.fromRGBO(255, 138, 50, 0.8)),(){
 
+
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GalleryPage()),
+              );
+
+
             }),
             makeDashboardItem(
-                "Map",
+                "Local CRUD",
                 width,
                 Icons.map,
                 gradientBankCard(Color.fromRGBO(134, 146, 160, 1.0),
