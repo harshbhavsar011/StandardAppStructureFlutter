@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:standardappstructure/utils/constants.dart';
 import 'package:standardappstructure/utils/sharedprefutils.dart';
@@ -30,7 +31,7 @@ class Utils {
 
   static void showAlert(
       BuildContext context, String title, String text, VoidCallback onPressed,bool cancelable) {
-    var alert = AlertDialog(
+    var alert = Utils.isAndroidPlatform() ? AlertDialog: CupertinoAlertDialog (
 
       title: Text(title,overflow: TextOverflow.ellipsis,),
 
@@ -43,7 +44,7 @@ class Utils {
       ),
 
       actions: <Widget>[
-        FlatButton(
+        Utils.isAndroidPlatform()?FlatButton:CupertinoDialogAction(
             onPressed: onPressed,
             child: Text(
               "OK",

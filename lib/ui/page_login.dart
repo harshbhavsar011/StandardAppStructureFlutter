@@ -9,7 +9,6 @@ import 'package:standardappstructure/utils/constants.dart';
 import 'package:standardappstructure/utils/sharedprefutils.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
-import 'package:standardappstructure/widgets/custom_textfield.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:standardappstructure/widgets/progressview.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
