@@ -4,6 +4,7 @@ import 'package:standardappstructure/utils/constants.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
+import 'package:standardappstructure/widgets/progressview.dart';
 
 class PageForgotPassword extends StatefulWidget {
   @override
@@ -21,27 +22,32 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        color: Colors.grey.shade100,
-        child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                autovalidate: _autoValidate,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Header(),
-                    _emailFeild(),
-                  ],
+
+      body: ProgressWidget(
+          isShow: isLoading,
+          opacity: 0.6,
+          child: Container(
+              color: Colors.grey.shade100,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Form(
+                          key: _formKey,
+                          autovalidate: _autoValidate,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Header(),
+                              _emailFeild(),
+                            ],
+                          ),
+                        ),
+                      ]
+                  ),
                 ),
-              ),
-            ]
-          ),
-        ),
-      ),
+              )))
     );
   }
 
@@ -100,7 +106,7 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
           ),
           color: Colors.blue,
           onPressed: () {
-            setLoading(true);
+
             _validateInputs();
           },
         ),
@@ -123,6 +129,7 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
 
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
+      setLoading(true);
 //    If all data are correct then save data to out variables
       _formKey.currentState.save();
       // Go to Dashboard
@@ -130,8 +137,20 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
         if (connectionResult) {
           _auth.sendPasswordResetEmail(email: _email).then((result){
             setLoading(false);
+
+            Utils.showAlert(context, "Forgot password?",
+                "We sent an email to $_email with instructions for resetting password. ",
+                    () {
+                  Navigator.pop(context);
+                },true);
+
           }).catchError((error) {
             print("Errorrr - "+error.toString());
+            Utils.showAlert(context, "Flutter",
+                error.toString(),
+                    () {
+                  Navigator.pop(context);
+                },true);
           });
 
         } else {

@@ -5,6 +5,7 @@ import 'package:standardappstructure/ui/introscreens/page_onboarding.dart';
 import 'package:standardappstructure/ui/page_dash.dart';
 import 'package:standardappstructure/ui/page_login.dart';
 import 'package:standardappstructure/ui/page_signup.dart';
+import 'package:standardappstructure/ui/page_splash.dart';
 import 'package:standardappstructure/utils/sharedprefutils.dart';
 
 
@@ -17,10 +18,6 @@ class IOSApp extends StatefulWidget {
     return new IOSAppState();
   }
 
-
-
-
-
 }
 
 class IOSAppState extends State<IOSApp> {
@@ -31,24 +28,7 @@ class IOSAppState extends State<IOSApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    firstScreen = LoginPage();
-    SharedPreferencesUtils.getOnBoardScreen().then((value) {
-      if (value) {
-        //Navigate to OnBoarding Screen.
-        //Navigate to OnBoarding First Time..
-        firstScreen = OnboardingMainPage();
-      } else {
 
-        SharedPreferencesUtils.getLogin().then((value) {
-          if (value) {
-            //Navigate to DashBoard If user already logged In.
-            firstScreen = Dashboard();
-          }else{
-            firstScreen = Dashboard();
-          }
-        });
-      }
-    });
   }
 
 
@@ -59,7 +39,7 @@ class IOSAppState extends State<IOSApp> {
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
-      home: firstScreen,
+      home: SplashScreen(),
     );
   }
 }
@@ -79,19 +59,7 @@ class AndroidAppState extends State<AndroidApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    SharedPreferencesUtils.getOnBoardScreen().then((value) {
-      if (value) {
-        //Navigate to OnBoarding Screen.
-        //Navigate to OnBoarding First Time..
-        firstScreen = OnboardingMainPage();
-      } else {
-        firstScreen = LoginPage();
-      }
-    });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +68,7 @@ class AndroidAppState extends State<AndroidApp> {
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
-        home: firstScreen
+        home: SplashScreen()
     );
   }
 }
