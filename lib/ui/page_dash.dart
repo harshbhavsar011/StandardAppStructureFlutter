@@ -29,7 +29,7 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.grey.shade200,
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: EdgeInsets.only(right: width/23),
             child: GestureDetector(
               onTap: (){
                 SharedPreferencesUtils.setLogin(false);

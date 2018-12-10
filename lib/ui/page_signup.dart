@@ -7,6 +7,7 @@ import 'package:standardappstructure/utils/constants.dart';
 import 'package:standardappstructure/utils/utils.dart';
 import 'package:standardappstructure/widgets/box_customfeild.dart';
 import 'package:standardappstructure/widgets/custom_textfield.dart';
+import 'package:standardappstructure/widgets/progressview.dart';
 
 class PageSignUp extends StatefulWidget {
   @override
@@ -16,49 +17,51 @@ class PageSignUp extends StatefulWidget {
 class _PageSignUpState extends State<PageSignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var passKey = GlobalKey<FormFieldState>();
-
   bool _autoValidate = false;
   String _name, _email, _phoneNo, _password, _confirmPassoword;
   bool isLoading = false;
+  String passString;
+  String confirmPassString;
 
 // Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  FocusNode _nameFocusNode = new FocusNode();
-  FocusNode _emailFocusNode = new FocusNode();
-  FocusNode _phoneNoFocusNode = new FocusNode();
-  FocusNode _passFocusNode = new FocusNode();
-  FocusNode _cofirmpassFocusNode = new FocusNode();
-
   final _passwordController = TextEditingController();
   final _confirmPassController = TextEditingController();
 
+  double width, height;
+
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        color: Colors.grey.shade200,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Form(
-                      key: _formKey,
-                      autovalidate: _autoValidate,
-                      child: Column(
-                        children: <Widget>[
-                          _nameWidget(),
-                          _emailWidget(),
-                          _passwordWidget(),
-                          _confirmPassWidget(),
-                          SizedBox(height: 30.0),
-
-                        ],
-                      )),
-                  _signUpButtonWidget()
-                ],
+      body: ProgressWidget(
+        isShow: isLoading,
+        opacity: 0.6,
+        child: Container(
+          color: Colors.grey.shade200,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Form(
+                        key: _formKey,
+                        autovalidate: _autoValidate,
+                        child: Column(
+                          children: <Widget>[
+                            _nameWidget(),
+                            _emailWidget(),
+                            _pwdFeildWidget(),
+                            _confirmPassWidget(),
+                            SizedBox(height: 30.0),
+                          ],
+                        )),
+                    _signUpButtonWidget()
+                  ],
+                ),
               ),
             ),
           ),
@@ -69,7 +72,8 @@ class _PageSignUpState extends State<PageSignUp> {
 
   Container _signUpButtonWidget() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 26.0),
+      padding:
+          EdgeInsets.symmetric(vertical: height / 40, horizontal: width / 15),
       width: double.infinity,
       child: RaisedButton(
         padding: EdgeInsets.all(12.0),
@@ -79,7 +83,6 @@ class _PageSignUpState extends State<PageSignUp> {
         ),
         color: Colors.blue,
         onPressed: () {
-          setLoading(true);
           _validateInputs();
         },
       ),
@@ -91,29 +94,18 @@ class _PageSignUpState extends State<PageSignUp> {
       hintText: "Confirm Password",
       lableText: "Confirm Password",
       obscureText: true,
-      controller: _confirmPassController,
       icon: Icons.lock_outline,
       validator: validatePasswordMatching,
+      onChanged: (String val) {
+        confirmPassString = val;
+      },
       onSaved: (String val) {
         _confirmPassoword = val;
       },
     );
   }
 
-  BoxFeild _passwordWidget() {
-    return BoxFeild(
-      key: passKey,
-      hintText: "Enter Password",
-      lableText: "Password",
-      obscureText: true,
-      icon: Icons.lock_outline,
-      controller: _passwordController,
-      validator: validatePassword,
-      onSaved: (String val) {
-        _password = val;
-      },
-    );
-  }
+
 
   BoxFeild _emailWidget() {
     return BoxFeild(
@@ -127,6 +119,53 @@ class _PageSignUpState extends State<PageSignUp> {
       },
     );
   }
+
+
+  Container _pwdFeildWidget(){
+    return Container(
+      child:  Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: width / 30,
+          ),
+          Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: height / 400, bottom: height / 400, left: width / 50, right: width / 50),
+                padding: EdgeInsets.all(height / 100),
+                alignment: Alignment.center,
+                height: height / 14,
+                decoration:  BoxDecoration(
+                    color: Colors.grey.shade100,
+                    border:  Border.all(color: Colors.grey.shade400, width: 1.0),
+                    borderRadius:  BorderRadius.circular(8.0)),
+                child:  TextFormField(
+                  key: passKey,
+                  obscureText: true,
+                  controller: _passwordController,
+                  onSaved: (String val) {
+                    _password = val;
+                  },
+                  validator: validatePassword,
+                  decoration:  InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        size: height/34,
+                      ),
+                    hintText: "Enter Password",
+                    ),
+                ),
+              )),
+        ],
+      ),
+      padding: EdgeInsets.only(bottom : height / 58),
+      margin: EdgeInsets.only(
+          top: height / 50, right: width / 20, left: width / 30),
+    );
+  }
+
 
   BoxFeild _nameWidget() {
     return BoxFeild(
@@ -171,14 +210,6 @@ class _PageSignUpState extends State<PageSignUp> {
     return null;
   }
 
-  String validateConfirmPassword(String value) {
-    if (value.length == 0) {
-      return "Password is Required";
-    }
-    return null;
-  }
-
-//https://restcountries.eu/rest/v2/all
   String validatePasswordMatching(String value) {
     var password = passKey.currentState.value;
 
@@ -191,65 +222,27 @@ class _PageSignUpState extends State<PageSignUp> {
   }
 
 
-/*
-  bool validatePasswordMatching() {
-
-    if (_passwordController.text != _confirmPassController.text) {
-      Utils.showAlert(context, "Flutter", "Passwords are not matched.", () {
-        Navigator.pop(context);
-      },true);
-      return false;
-    } else {
-      return true;
-    }
-  }*/
 
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
       //If all data are correct then save data to out variables
       //Make a REST Api Call with success Go to Login Page after User Created.
 
-        _formKey.currentState.save();
+      _formKey.currentState.save();
+      setLoading(true);
 
-
-        Utils.checkConnection().then((connectionResult) {
-          if (connectionResult) {
-            firebaseSignUp();
-          } else {
-            setLoading(false);
-            Utils.showAlert(context, "Flutter",
-                "Internet is not connected. Please check internet connection.",
-                    () {
-                  Navigator.pop(context);
-                },true);
-          }
-        });
-
-
-        /*if (validatePasswordMatching()) {
-
-          Utils.checkConnection().then((connectionResult) {
-            if (connectionResult) {
-              firebaseSignUp();
-            } else {
-              setLoading(false);
-              Utils.showAlert(context, "Flutter",
-                  "Internet is not connected. Please check internet connection.",
-                      () {
-                    Navigator.pop(context);
-                  },true);
-            }
-          });
-        }else{
+      Utils.checkConnection().then((connectionResult) {
+        if (connectionResult) {
+          firebaseSignUp();
+        } else {
           setLoading(false);
-          setState(() {
-            _autoValidate = true;
-          });
-        }*/
-
-
-
-
+          Utils.showAlert(context, "Flutter",
+              "Internet is not connected. Please check internet connection.",
+              () {
+            Navigator.pop(context);
+          }, true);
+        }
+      });
     } else {
 //    If all data are not valid then start auto validation.
       setState(() {
@@ -259,7 +252,6 @@ class _PageSignUpState extends State<PageSignUp> {
   }
 
   void firebaseSignUp() {
-    setLoading(true);
     handleSignUp(_email, _password).then((FirebaseUser user) {
       print(user);
       setLoading(false);
@@ -271,7 +263,7 @@ class _PageSignUpState extends State<PageSignUp> {
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
-      },false);
+      }, false);
     })
       ..catchError((e) {
         setLoading(false);
@@ -279,7 +271,7 @@ class _PageSignUpState extends State<PageSignUp> {
             context, "Flutter", "User is already registred with this Email-ID.",
             () {
           Navigator.pop(context);
-        },true);
+        }, true);
       });
   }
 

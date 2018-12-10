@@ -38,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String _email, _password;
   bool isLoading = false;
-
+  double width;
+  double height;
   Future<FirebaseUser> _googleSignIn() async {
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth =
@@ -65,6 +66,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
+     width = MediaQuery.of(context).size.width;
+     height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: ProgressWidget(
@@ -90,9 +96,9 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 _emailWidget(),
                 _passwordWidget(),
-                SizedBox(height: 30.0),
+                SizedBox(height: height*0.04),
                 _loginButtonWidget(),
-                SizedBox(height: 16.0),
+                SizedBox(height: height*0.02),
                 GestureDetector(
                     onTap: (){
                       Navigator.push(
@@ -101,11 +107,11 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                     child: Text("Forgot Password?", style: TextStyle(fontSize: 16.0))),
-                SizedBox(height: 16.0),
+                SizedBox(height: height*0.02),
                 Divider(height: 4.0, color: Colors.grey),
-                SizedBox(height: 16.0),
+                SizedBox(height: height*0.02),
                 _socialButtons(),
-                SizedBox(height: 30.0),
+                SizedBox(height: height*0.04),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -115,9 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontWeight: FontWeight.normal,
                             color: Colors.black,
                             fontSize: 16.0)),
-                    SizedBox(
-                      width: 10.0,
-                    ),
+                    SizedBox(width: width*0.03),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -152,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Image.asset("assets/icons/icnfb.png"),
           ),
         ),
-        Padding(padding: EdgeInsets.only(left: 16.0, right: 16.0)),
+        Padding(padding: EdgeInsets.only(left: width*0.04, right: width*0.04)),
         GestureDetector(
           onTap: () {
             checkUser();

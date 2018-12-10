@@ -145,6 +145,7 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
                 },true);
 
           }).catchError((error) {
+            setLoading(false);
             print("Errorrr - "+error.toString());
             Utils.showAlert(context, "Flutter",
                 error.toString(),
@@ -155,7 +156,7 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
 
         } else {
           setLoading(false);
-          Utils.showAlert(context, "Flutter",
+          Utils.showAlert(context, "",
               "Internet is not connected. Please check internet connection.",
                   () {
                 Navigator.pop(context);

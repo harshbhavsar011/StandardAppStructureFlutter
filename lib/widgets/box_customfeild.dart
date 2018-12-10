@@ -13,6 +13,7 @@ class BoxFeild extends StatefulWidget {
   final bool obscureText;
   final bool autocorrect;
   final int maxLines;
+  final Key key;
   final int maxLength;
   final bool maxLengthEnforced;
   final ValueChanged<String> onChanged;
@@ -35,7 +36,7 @@ class BoxFeild extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
 
   const BoxFeild({
-    Key key,
+    this.key,
     this.controller,
     this.focusNode,
     TextInputType keyboardType,
@@ -74,30 +75,40 @@ class BoxFeild extends StatefulWidget {
         assert(maxLines == null || maxLines > 0),
         assert(maxLength == null || maxLength > 0),
         keyboardType = keyboardType ??
-            (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
-        super(key: key);
+            (maxLines == 1 ? TextInputType.text : TextInputType.multiline);
 
   @override
   _BoxFeildState createState() => _BoxFeildState();
 }
 
 class _BoxFeildState extends State<BoxFeild> {
+  double width;
+  double height;
   Color focusBorderColor =  Colors.grey.shade400;
   FocusNode _focusNode = FocusNode();
   ValueChanged<Colors> focusColorChange;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   void dispose() {
     super.dispose();
     _focusNode.dispose();
+    this.widget.controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+     width = MediaQuery.of(context).size.width;
+     height = MediaQuery.of(context).size.height;
 
-    return new Container(
-      child: new Row(
+    return  Container(
+      child:  Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -106,34 +117,33 @@ class _BoxFeildState extends State<BoxFeild> {
           ),
           Expanded(
               child: Container(
-            margin: const EdgeInsets.only(
-                top: 2.0, bottom: 2.0, left: 8.0, right: 8.0),
-            padding: const EdgeInsets.all(6.0),
+            margin: EdgeInsets.only(top: height / 400, bottom: height / 400, left: width / 50, right: width / 50),
+            padding: EdgeInsets.all(height / 100),
             alignment: Alignment.center,
-            height: 52.0,
-            decoration: new BoxDecoration(
+            height: height / 14,
+            decoration:  BoxDecoration(
                 color: Colors.grey.shade100,
-                border: new Border.all(color: focusBorderColor, width: 1.0),
-                borderRadius: new BorderRadius.circular(8.0)),
-            child: new TextFormField(
+                border:  Border.all(color: focusBorderColor, width: 1.0),
+                borderRadius:  BorderRadius.circular(8.0)),
+            child:  TextFormField(
+              key: this.widget.key,
               obscureText: this.widget.obscureText,
+              controller: this.widget.controller,
               onSaved: this.widget.onSaved,
               validator: this.widget.validator,
               onFieldSubmitted: this.widget.onFieldSubmitted,
-              decoration: new InputDecoration(
+              decoration:  InputDecoration(
                   border: InputBorder.none,
                   prefixIcon: Icon(
                     this.widget.icon,
-                    size: 24.0,
+                    size: height/34,
                   ),
                   hintText: this.widget.hintText),
             ),
           )),
         ],
       ),
-      padding: EdgeInsets.only(
-        bottom: 14.0,
-      ),
+      padding: EdgeInsets.only(bottom : height / 58),
       margin: EdgeInsets.only(
           top: height / 50, right: width / 20, left: width / 30),
     );
