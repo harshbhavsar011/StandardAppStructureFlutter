@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:standardappstructure/ui/introscreens/page_onboarding.dart';
 import 'package:standardappstructure/ui/page_dash.dart';
 import 'package:standardappstructure/ui/page_login.dart';
@@ -8,8 +13,9 @@ import 'package:standardappstructure/ui/page_signup.dart';
 import 'package:standardappstructure/ui/page_splash.dart';
 import 'package:standardappstructure/utils/sharedprefutils.dart';
 
-
-void main() => runApp(defaultTargetPlatform == TargetPlatform.iOS ? IOSApp() : AndroidApp());
+void main() => SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+.then((_) {
+  runApp(defaultTargetPlatform == TargetPlatform.iOS ? IOSApp() : AndroidApp());});
 
 
 class IOSApp extends StatefulWidget {

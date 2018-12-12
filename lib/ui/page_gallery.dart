@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_multiple_image_picker/flutter_multiple_image_picker.dart';
+
 
 class GalleryPage extends StatefulWidget {
   @override
@@ -13,6 +16,12 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
 
+  BuildContext context;
+  String _platformMessage = 'No Error';
+  List images;
+  int maxImageNo = 10;
+  bool selectSingleImage = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -20,6 +29,31 @@ class _GalleryPageState extends State<GalleryPage> {
 
 
   }
+
+
+  initMultiPickUp() async {
+    setState(() {
+      images = null;
+      _platformMessage = 'No Error';
+    });
+    List resultList;
+    String error;
+    try {
+      resultList = await FlutterMultipleImagePicker.pickMultiImages(
+          maxImageNo, selectSingleImage);
+    } on PlatformException catch (e) {
+      error = e.message;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      if (error == null) _platformMessage = 'No Error Dectected';
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
