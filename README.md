@@ -1,4 +1,4 @@
-# standardappstructure
+# MVC structure Flutter
 
 A new Flutter project.
 
