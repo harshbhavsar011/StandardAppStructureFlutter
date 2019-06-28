@@ -1,6 +1,6 @@
 # MVC structure Flutter
 
-A new Flutter project.
+Note: Its outdated.
 
 ## Getting Started
 
